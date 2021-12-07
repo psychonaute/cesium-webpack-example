@@ -1,24 +1,58 @@
-import { Ion, Viewer, createWorldTerrain, createOsmBuildings, Cartesian3, Math } from "cesium";
+import {
+    Viewer,
+    Cartesian3,
+    CesiumTerrainProvider,
+    TileCoordinatesImageryProvider,
+    WebMapTileServiceImageryProvider,
+} from "cesium";
+
+// import Cesium from "cesium";
 import "cesium/Widgets/widgets.css";
 import "../src/css/main.css"
 
-// Your access token can be found at: https://cesium.com/ion/tokens.
-// This is the default access token
-Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQzYjYtYTQ0OS1kMWFjYmFkNjc5YzciLCJpZCI6NTc3MzMsImlhdCI6MTYyNzg0NTE4Mn0.XcKpgANiY19MC4bdFUXMVEBToBmqS8kuYpUlxJHYZxk';
-
-// Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
-const viewer = new Viewer('cesiumContainer', {
-  terrainProvider: createWorldTerrain()
+var viewer = new Viewer("cesiumContainer", {
+    requestRenderMode : true,
+    maximumRenderTimeChange : Infinity,
+    baseLayerPicker: false,
+    terrainProvider : new CesiumTerrainProvider({
+        url : 'http://localhost:4000/tilesets/srtm/' ,
+        requestVertexNormals : true
+    }),
+    // timeline: false,
+    // animation : false,
+    showRenderLoopErrors: true
 });
 
-// Add Cesium OSM Buildings, a global 3D buildings layer.
-viewer.scene.primitives.add(createOsmBuildings());   
+var layers = viewer.scene.imageryLayers;
+layers.removeAll();
+
+var scene = viewer.scene;
+scene.debugShowFramesPerSecond = true;
+
+
+// keep zoom level increment whole
+// cf: https://groups.google.com/g/cesium-dev/c/eBgIKjw6HCE/m/XQEfZIZXWIwJ
+viewer.scene.globe.maximumScreenSpaceError = 1;
+
+var high_res = layers.addImageryProvider(new WebMapTileServiceImageryProvider({
+    url : 'http://127.0.0.1:5000/qgis_generate/WMTS',
+    layer : 'qgis_generate',
+    style: 'default',
+    format : 'image/jpg',
+    tileMatrixSetID : 'GoogleMapsCompatible',
+    maximumLevel: 14
+}));
+
+var tile_layer = layers.addImageryProvider(
+    new TileCoordinatesImageryProvider()
+);
 
 // Fly the camera to San Francisco at the given longitude, latitude, and height.
 viewer.camera.flyTo({
-  destination : Cartesian3.fromDegrees(-122.4175, 37.655, 400),
-  orientation : {
-    heading : Math.toRadians(0.0),
-    pitch : Math.toRadians(-15.0),
-  }
-});
+    destination : Cartesian3.fromDegrees(41.59, 41.61, 9000),
+    // orientation : {
+    //   heading : Math.toRadians(0.0),
+    //   pitch : Math.toRadians(-15.0),
+    // }
+  });
+

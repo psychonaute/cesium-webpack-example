@@ -14,7 +14,7 @@ module.exports = {
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, 'dist'),
-        sourcePrefix: ''
+        sourcePrefix: '',
     },
     amd: {
         // Enable webpack-friendly use of require in Cesium
@@ -44,7 +44,8 @@ module.exports = {
             patterns: [
                 { from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' },
                 { from: path.join(cesiumSource, 'Assets'), to: 'Assets' },
-                { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' }
+                { from: path.join(cesiumSource, 'Widgets'), to: 'Widgets' },
+                { from: path.join(__dirname, 'src/test_tms'), to: 'test_tms' }
             ]
         }),
         new webpack.DefinePlugin({
@@ -53,5 +54,5 @@ module.exports = {
         })
     ],
     mode: 'development',
-    devtool: 'eval',
+    devtool: 'eval'
 };

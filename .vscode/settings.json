@@ -1,0 +1,31 @@
+{
+    "local-history.exclude": [
+        "**/anyfolderlikethis/**",
+    ],
+    "files.watcherExclude": {
+        "**/anyfolderlikethis/**": true,
+    },
+    "workbench.colorCustomizations": {
+        "activityBarBadge.background": "#efd81d",
+        // "activityBarBadge.foreground": "#e7e7e7",
+        // "editorGroup.border": "#efd81d",
+        // "panel.border": "#efd81d",
+        // "sash.hoverBorder": "#efd81d",
+        // "sideBar.border": "#efd81d",
+        "statusBar.background": "#b1951b",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#efd81d",
+        "statusBarItem.remoteBackground": "#efd81d",
+        "statusBarItem.remoteForeground": "#15202b",
+        "activityBar.activeBorder": "#efd81d",
+        // "activityBar.activeBackground": "#efd81d",
+        // "activityBar.background": "#efd81d",
+        // "activityBar.foreground": "#15202b",
+        // "activityBar.inactiveForeground": "#15202b99",
+        // "statusBar.foreground": "#15202b",
+        // "titleBar.activeBackground": "#f5cc02",
+        // "titleBar.activeForeground": "#15202b",
+        // "titleBar.inactiveBackground": "#f5cc0299",
+        // "titleBar.inactiveForeground": "#15202b99"
+    },
+}
