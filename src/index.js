@@ -1,38 +1,25 @@
-import {
-    Viewer,
-    Cartesian3,
-    CesiumTerrainProvider,
-    TileCoordinatesImageryProvider,
-    WebMapTileServiceImageryProvider,
-} from "cesium";
+import * as Cesium from "cesium"
 
 // import Cesium from "cesium";
 import "cesium/Widgets/widgets.css";
 import "../src/css/main.css"
 
-var viewer = new Viewer("cesiumContainer", {
-    requestRenderMode : true,
-    maximumRenderTimeChange : Infinity,
-    baseLayerPicker: false,
-    terrainProvider : new CesiumTerrainProvider({
-        url : 'http://localhost:4000/tilesets/srtm/' ,
-        requestVertexNormals : true
-    }),
-    // timeline: false,
-    // animation : false,
-    showRenderLoopErrors: true
-});
+// Create a viewer that won't render a new frame unless
+// updates to the scene require it to reduce overall CPU usage.
+var viewer = new Cesium.Viewer("cesiumContainer", {
+    requestRenderMode: true,
+    maximumRenderTimeChange: Infinity,
+    terrainProvider: Cesium.createWorldTerrain(),
+  });
 
-var layers = viewer.scene.imageryLayers;
-layers.removeAll();
-
-var scene = viewer.scene;
-scene.debugShowFramesPerSecond = true;
-
-
+viewer.scene.debugShowFramesPerSecond = true;
 // keep zoom level increment whole
 // cf: https://groups.google.com/g/cesium-dev/c/eBgIKjw6HCE/m/XQEfZIZXWIwJ
 viewer.scene.globe.maximumScreenSpaceError = 1;
+
+
+var layers = viewer.scene.imageryLayers;
+layers.removeAll();
 
 var high_res = layers.addImageryProvider(new WebMapTileServiceImageryProvider({
     url : 'http://127.0.0.1:5000/qgis_generate/WMTS',
