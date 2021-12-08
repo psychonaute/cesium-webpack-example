@@ -12,36 +12,34 @@ var viewer = new Cesium.Viewer("cesiumContainer", {
     terrainProvider: Cesium.createWorldTerrain(),
   });
 
-var scene = viewer.scene;
-scene.debugShowFramesPerSecond = true;
+viewer.scene.debugShowFramesPerSecond = true;
+// keep zoom level increment whole
+// cf: https://groups.google.com/g/cesium-dev/c/eBgIKjw6HCE/m/XQEfZIZXWIwJ
+viewer.scene.globe.maximumScreenSpaceError = 1;
 
-var tileset;
 
-var viewModel = {
-    requestRenderMode: true,
-    showTimeOptions: false,
-    timeChangeEnabled: false,
-    maximumRenderTimeChange: 0.0,
-    lastRenderTime: "",
-    requestRender: function () {
-        scene.requestRender();
-    },
-};
+var layers = viewer.scene.imageryLayers;
+layers.removeAll();
 
-// Clear scene and set default view.
-var handler;
-function resetScene() {
-    viewer.trackedEntity = undefined;
-    viewer.dataSources.removeAll();
-    viewer.entities.removeAll();
-    viewer.scene.primitives.remove(tileset);
-    viewer.clock.shouldAnimate = false;
-    handler = handler && handler.destroy();
-    scene.skyBox.show = true;
-    scene.camera.flyHome(0.0);
-    scene.requestRender();
-    viewModel.showTimeOptions = false;
-    viewModel.timeChangeEnabled = false;
-    viewModel.maximumRenderTimeChange = 0;
-}
+var high_res = layers.addImageryProvider(new WebMapTileServiceImageryProvider({
+    url : 'http://127.0.0.1:5000/qgis_generate/WMTS',
+    layer : 'qgis_generate',
+    style: 'default',
+    format : 'image/jpg',
+    tileMatrixSetID : 'GoogleMapsCompatible',
+    maximumLevel: 14
+}));
+
+var tile_layer = layers.addImageryProvider(
+    new TileCoordinatesImageryProvider()
+);
+
+// Fly the camera to San Francisco at the given longitude, latitude, and height.
+viewer.camera.flyTo({
+    destination : Cartesian3.fromDegrees(41.59, 41.61, 9000),
+    // orientation : {
+    //   heading : Math.toRadians(0.0),
+    //   pitch : Math.toRadians(-15.0),
+    // }
+  });
 
